@@ -36,7 +36,8 @@ class RaisedPlayer(BasePokerPlayer):
         return self.same_kind(3) == 1
 
     def straight(self):
-        values = sorted(self.value_map.values(), c)
+        values = sorted(self.value_map.values())
+        pass
 
     def same_kind(self, n):
         return self.value_map.values().count(n)
