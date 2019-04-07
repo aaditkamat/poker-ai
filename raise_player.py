@@ -3,7 +3,7 @@ from keras.models import Sequential
 from keras.layers import Dense
 from keras.layers.convolutional import Conv2D
 from keras.layers.convolutional import MaxPooling2D
-from keras.layers import Flatten
+from keras.layers import Flatte
 from random import choice
 from pypokerengine.engine.card import Card
 from pypokerengine.players import BasePokerPlayer
@@ -11,7 +11,7 @@ import numpy as np
 
 
 class Group18Player(BasePokerPlayer):
-    # number of poker rounds
+    # number of poker round
     max_no_of_rounds = 5
     # array of cards ranks obtained from PyPokerEngine
     ranks = [Card.RANK_MAP[key] for key in Card.RANK_MAP]
@@ -29,10 +29,10 @@ class Group18Player(BasePokerPlayer):
     col_padding_offset = 2
 
     def __init__(self):
+        # Details are included in google doc
         self.model = Sequential()
 
-        self.model.add(Conv2D(16, (5, 5), strides=(1, 1), activation='relu',
-                              input_shape=(Group18Player.card_tensor_size, Group18Player.card_tensor_size, 16)))
+        self.model.add(Conv2D(16, (5, 5), strides=(1, 1), activation='relu', input_shape=(Group18Player.card_tensor_size, Group18Player.card_tensor_size, 16)))
         self.model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
 
         self.model.add(Flatten())
@@ -87,6 +87,12 @@ class Group18Player(BasePokerPlayer):
             # fill the last column up to row_nums with ones
             for i in range(Group18Player.row_padding_offset, row_nums + Group18Player.row_padding_offset):
                 np.put(pot_layer[i], [col_nums + Group18Player.col_padding_offset - 1], [1])
+            for i in range(len(Group18Player.suits)):
+                np.put(pot_layer[i], list(range(col_nums - 1)), [1] * (col_nums - 1))
+            # fill the last column up to row_nums with ones
+            for i in range(row_nums):
+                np.put(pot_layer[i], [col_nums - 1], [1])
+        
         round_tensor[ctr] = pot_layer
         return ctr + 1
 
@@ -132,7 +138,7 @@ class Group18Player(BasePokerPlayer):
         # placeholder for the actual action to be taken by the agent
         action_dict = choice(valid_actions)
         action = action_dict['action']
-
+        
         return action
 
     def receive_game_start_message(self, game_info):
