@@ -3,7 +3,7 @@ from keras.models import Sequential
 from keras.layers import Dense
 from keras.layers.convolutional import Conv2D
 from keras.layers.convolutional import MaxPooling2D
-from keras.layers import Flatte
+from keras.layers import Flatten
 from random import choice
 from pypokerengine.engine.card import Card
 from pypokerengine.players import BasePokerPlayer
